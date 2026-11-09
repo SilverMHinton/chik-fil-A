@@ -5,19 +5,19 @@ import java.util.Map;
 import java.util.HashMap;
 
 
-
-
 public class Menu {
 
     Map<String, Double> entrees = new HashMap<>();
     Map<String, Double> breakfast = new HashMap<>();
     Map<String, Double> sides = new HashMap<>();
+    Map<String, Double> salads = new HashMap<>();
     Map<String, Double> family = new HashMap<>();
 
     public Menu() {
         loadMenu(entrees, MenuType.ENTREES);
         loadMenu(breakfast, MenuType.BREAKFAST);
         loadMenu(sides, MenuType.SIDES);
+        loadMenu(sides, MenuType.SALADS);
         loadMenu(family, MenuType.FAMILY);
     }
 
@@ -79,6 +79,27 @@ public class Menu {
             	
             default: break;
         }
+        
+    }
+    
+    public Map<String, Double> getEntrees() {
+        return entrees;
+    }
+
+    public Map<String, Double> getBreakfast() {
+        return breakfast;
+    }
+    
+    public Map<String, Double> getSides() {
+        return breakfast;
+    }
+    
+    public Map<String, Double> getSalads() {
+        return breakfast;
+        
+    }
+    public Map<String, Double> getFamily() {
+        return breakfast;
     }
 }
 
