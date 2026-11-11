@@ -11,10 +11,12 @@ public class Order {
 	String menuItem;
 	int itemAmount;
 	double total;
+	Menu menu;
 		
-	public Order(int custID, int orderNum) {
+	public Order(int custID, int orderNum, Menu menu) {
 		this.custID = custID;
 		this.orderNum = orderNum;
+		this.menu = menu;
 	}
 		
 	//methods 
@@ -58,8 +60,37 @@ public class Order {
 		//display order
 		System.out.println(order);
 	}
+	
+	public double getPrice(String menuItem) {
+		if (menu.getEntrees().containsKey(menuItem)) {
+			return menu.getEntrees().get(menuItem);
+		}
+		
+		if (menu.getBreakfast().containsKey(menuItem)) {
+			return menu.getBreakfast().get(menuItem);
+		}
+		
+		if (menu.getSides().containsKey(menuItem)) {
+	        return menu.getSides().get(menuItem);
+	    }
+
+	    if (menu.getSalads().containsKey(menuItem)) {
+	        return menu.getSalads().get(menuItem);
+	    }
+
+	    if (menu.getFamily().containsKey(menuItem)) {
+	        return menu.getFamily().get(menuItem);
+	    }
+
+	    return 0;
+	}
 		
 	public void total() {
+		total = 0;
+		
+		for (String item : order) {
+			total += getPrice(item);
+		}
 		System.out.println("The total is: $" + total);
 	}
 	

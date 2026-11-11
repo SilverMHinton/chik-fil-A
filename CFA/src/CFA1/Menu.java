@@ -17,7 +17,7 @@ public class Menu {
         loadMenu(entrees, MenuType.ENTREES);
         loadMenu(breakfast, MenuType.BREAKFAST);
         loadMenu(sides, MenuType.SIDES);
-        loadMenu(sides, MenuType.SALADS);
+        loadMenu(salads, MenuType.SALADS);
         loadMenu(family, MenuType.FAMILY);
     }
 
@@ -91,15 +91,15 @@ public class Menu {
     }
     
     public Map<String, Double> getSides() {
-        return breakfast;
+        return sides;
     }
     
     public Map<String, Double> getSalads() {
-        return breakfast;
+        return salads;
         
     }
     public Map<String, Double> getFamily() {
-        return breakfast;
+        return family;
     }
 }
 
