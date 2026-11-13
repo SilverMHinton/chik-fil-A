@@ -62,12 +62,12 @@ public class main {
 
         System.out.println();
 
-        // Calculate total
-        order1.total();
+        // Create transaction
+        Transactions transaction = new Transactions(order1);
 
-        // Pay
-        customer1.pay();
- 
+        // Display receipt and calculate total
+        transaction.printReceipt();
+        
 		/*System.out.println("What month is it?");
 
 		// print the menu
