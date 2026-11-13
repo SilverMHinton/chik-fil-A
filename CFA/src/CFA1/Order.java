@@ -8,8 +8,6 @@ public class Order {
 	ArrayList<String> order = new ArrayList<>();
 	int custID;
 	int orderNum;
-	String menuItem;
-	int itemAmount;
 	double total;
 	Menu menu;
 		
@@ -84,13 +82,21 @@ public class Order {
 
 	    return 0;
 	}
+	
+    public double getSubtotal() {
+
+        double total = 0;
+
+        for (String item : order) {
+            total += getPrice(item);
+        }
+
+        return total;
+    }
 		
 	public void total() {
-		total = 0;
 		
-		for (String item : order) {
-			total += getPrice(item);
-		}
+		double total = getSubtotal();
 		System.out.println("The total is: $" + total);
 	}
 	
