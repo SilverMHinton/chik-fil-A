@@ -28,7 +28,7 @@ public class Order {
 			
 		System.out.println(itemAmount + " " + menuItem + "(s) has been added to the order.");
 		//display order
-		System.out.println(order);
+		displayOrder();
 	}
 		
 	public void removeItem(String menuItem, int itemAmount) {
@@ -44,7 +44,7 @@ public class Order {
 		}
 		System.out.println(remove + " " + menuItem + "(s) have been removed from the order.");
 		//display order
-		System.out.println(order);
+		displayOrder();
 	}
 		
 	public void editItem(String oldItem, String newItem) {
@@ -58,7 +58,7 @@ public class Order {
 			System.out.println("Item not found.");
 		}
 		//display order
-		System.out.println(order);
+		displayOrder();
 	}
 	
 	public double getPrice(String menuItem) {
@@ -99,4 +99,9 @@ public class Order {
 		System.out.println("Customer ID: " + custID);
 		System.out.println("Items: " + order);
 	}
+	
+	 public ArrayList<String> getOrder() {
+	        return order;
+	    }
+
 }
