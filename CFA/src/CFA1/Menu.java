@@ -91,15 +91,15 @@ public class Menu {
     }
     
     public Map<String, Double> getSides() {
-        return breakfast;
+        return sides;
     }
     
     public Map<String, Double> getSalads() {
-        return breakfast;
+        return salads;
         
     }
     public Map<String, Double> getFamily() {
-        return breakfast;
+        return family;
     }
 }
 
