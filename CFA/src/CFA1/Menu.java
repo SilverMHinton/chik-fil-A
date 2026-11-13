@@ -17,7 +17,7 @@ public class Menu {
         loadMenu(entrees, MenuType.ENTREES);
         loadMenu(breakfast, MenuType.BREAKFAST);
         loadMenu(sides, MenuType.SIDES);
-        loadMenu(sides, MenuType.SALADS);
+        loadMenu(salads, MenuType.SALADS);
         loadMenu(family, MenuType.FAMILY);
     }
 
