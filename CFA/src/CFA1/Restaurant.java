@@ -47,4 +47,16 @@ public class Restaurant {
 	public Menu getMenu() {
 		return menu;
 	}
+	
+	public Map<String, Integer> getInventory() {
+	    return new HashMap<>(inventory);
+	}
+	
+	public int getEmployeeCount() {
+	    return employeeCount;
+	}
+
+	public String getSchedule() {
+	    return schedule;
+	}
 }
