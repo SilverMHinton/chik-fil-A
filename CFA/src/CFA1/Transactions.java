@@ -23,10 +23,19 @@ public class Transactions {
     public double getTotal() {
         return getSubtotal() + getTax();
     }
+    
+    public double calculateChange(double amountPaid) {
+        if (amountPaid < getTotal()) {
+            throw new IllegalArgumentException(
+                "Not enough money to pay for this order."
+            );
+        }
 
-    // Display receipt
+        return amountPaid - getTotal();
+    }
+    
     public void printReceipt() {
-
+    	
         System.out.println("------ RECEIPT ------");
 
         for (String item : order.getOrder()) {
@@ -41,5 +50,8 @@ public class Transactions {
         System.out.printf("Tax: $%.2f%n", getTax());
         System.out.printf("Total: $%.2f%n", getTotal());
     }
+    
 }
+
+
 

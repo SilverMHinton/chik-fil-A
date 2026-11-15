@@ -1,8 +1,6 @@
 package CFA1;
 
 
-
-
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -153,34 +151,34 @@ public class main extends Application {
 
         addButton.setOnAction(e -> {
 
-            String selectedItem =
-                    menuList.getSelectionModel().getSelectedItem();
+        	String selectedItem =
+        		    menuList.getSelectionModel().getSelectedItem();
 
-            if (selectedItem == null) {
-                showMessage("Please select a menu item.");
-                return;
-            }
+        		if (selectedItem == null) {
+        		    showMessage("Please select a menu item.");
+        		    return;
+        		}
 
-            int quantity = quantitySpinner.getValue();
+        		selectedItem = selectedItem.substring(
+        		    0, selectedItem.lastIndexOf(" - $")
+			);
 
-            for (int i = 0; i < quantity; i++) {
-                currentOrder.addItem(selectedItem, 1);
-                cartItems.add(selectedItem);
-            }
-        });
+			int quantity = quantitySpinner.getValue();
 
-        Button checkoutButton = new Button("Checkout");
-        Button backButton = new Button("Back");
+			for (int i = 0; i < quantity; i++) {
+				currentOrder.addItem(selectedItem, 1);
+				cartItems.add(String.format("%s - $%.2f", selectedItem, currentOrder.getPrice(selectedItem)));
+			}
+		});
 
-        checkoutButton.setOnAction(e -> showCheckout());
+		Button checkoutButton = new Button("Checkout");
+		Button backButton = new Button("Back");
 
-        backButton.setOnAction(e -> showHome());
+		checkoutButton.setOnAction(e -> showCheckout());
 
-        HBox orderControls = new HBox(10,
-                new Label("Quantity:"),
-                quantitySpinner,
-                addButton,
-                checkoutButton
+		backButton.setOnAction(e -> showHome());
+
+		HBox orderControls = new HBox(10, new Label("Quantity:"), quantitySpinner, addButton, checkoutButton
         );
 
         orderControls.setAlignment(Pos.CENTER);
@@ -194,101 +192,122 @@ public class main extends Application {
         );
 
         layout.setPadding(new Insets(20));
-        layout.setAlignment(Pos.CENTER);
+		layout.setAlignment(Pos.CENTER);
 
-        scene = new Scene(layout, 900, 650);
-        window.setScene(scene);
-    }
+		scene = new Scene(layout, 900, 650);
+		window.setScene(scene);
+	}
 
-    // Displays the selected menu category
+	// Displays the selected menu category
 
-    private void displayMenu(Map<String, Double> items) {
+	private void displayMenu(Map<String, Double> items) {
 
-        menuList.getItems().clear();
+		menuList.getItems().clear();
 
-        for (String item : items.keySet()) {
-            menuList.getItems().add(item);
-        }
-    }
+		for (Map.Entry<String, Double> entry : items.entrySet()) {
 
-    // ---------------- CHECKOUT SCREEN ----------------
+			String item = entry.getKey();
+			double price = entry.getValue();
 
-    private void showCheckout() {
+			menuList.getItems().add(String.format("%s - $%.2f", item, price));
+		}
+	}
 
-        if (currentOrder.getOrder().isEmpty()) {
-            showMessage("Your order is empty.");
-            return;
-        }
+	// ---------------- CHECKOUT SCREEN ----------------
 
-        Transactions transaction =
-                new Transactions(currentOrder);
+	private void showCheckout() {
 
-        Label title = new Label("Checkout");
-        title.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
+		if (currentOrder.getOrder().isEmpty()) {
+			showMessage("Your order is empty.");
+			return;
+		}
 
-        receiptArea.clear();
-        receiptArea.setEditable(false);
+		Transactions transaction = new Transactions(currentOrder);
 
-        StringBuilder receipt = new StringBuilder();
+		Label title = new Label("Checkout");
+		title.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
 
-        receipt.append("------ RECEIPT ------\n");
+		receiptArea.clear();
+		receiptArea.setEditable(false);
 
-        for (String item : currentOrder.getOrder()) {
-            receipt.append(String.format(
-                    "%s - $%.2f%n",
-                    item,
-                    currentOrder.getPrice(item)
-            ));
-        }
+		StringBuilder receipt = new StringBuilder();
 
-        receipt.append("---------------------\n");
+		receipt.append("------ RECEIPT ------\n");
 
-        receipt.append(String.format(
-                "Subtotal: $%.2f%n",
-                transaction.getSubtotal()
-        ));
+		for (String item : currentOrder.getOrder()) {
+			receipt.append(String.format("%s - $%.2f%n", item, currentOrder.getPrice(item)));
+		}
 
-        receipt.append(String.format(
-                "Tax: $%.2f%n",
-                transaction.getTax()
-        ));
+		receipt.append("---------------------\n");
 
-        receipt.append(String.format(
-                "Total: $%.2f%n",
-                transaction.getTotal()
-        ));
+		receipt.append(String.format("Subtotal: $%.2f%n", transaction.getSubtotal()));
 
-        receiptArea.setText(receipt.toString());
+		receipt.append(String.format("Tax: $%.2f%n", transaction.getTax()));
 
-        Button payButton = new Button("Complete Payment");
-        Button backButton = new Button("Back to Menu");
+		receipt.append(String.format("Total: $%.2f%n", transaction.getTotal()));
 
-        payButton.setOnAction(e -> {
-            showMessage("Payment complete! (Simulation)");
+		receiptArea.setText(receipt.toString());
 
-            currentOrder = null;
-            cartItems.clear();
+		// Payment controls
+		Label paymentLabel = new Label("Enter amount to pay:");
 
-            showHome();
-        });
+		TextField paymentField = new TextField();
+		paymentField.setPromptText("Enter amount (example: 20.00)");
 
-        backButton.setOnAction(e -> showCustomer());
+		Label changeLabel = new Label();
 
-        VBox layout = new VBox(20,
-                title,
-                receiptArea,
-                payButton,
-                backButton
-        );
+		Button payButton = new Button("Complete Payment");
+		Button backButton = new Button("Back to Menu");
 
-        layout.setPadding(new Insets(25));
-        layout.setAlignment(Pos.CENTER);
+		// Payment button
+		payButton.setOnAction(e -> {
 
-        scene = new Scene(layout, 500, 550);
-        window.setScene(scene);
-    }
+			try {
 
-    // ---------------- MANAGER SCREEN ----------------
+				double amountPaid = Double.parseDouble(paymentField.getText());
+
+				if (amountPaid < 0) {
+					changeLabel.setText("Please enter a positive amount.");
+					return;
+				}
+
+				double change = transaction.calculateChange(amountPaid);
+
+				changeLabel.setText(String.format("Payment successful! Your change: $%.2f", change));
+
+				transaction.printReceipt();
+
+				payButton.setDisable(true);
+				paymentField.setDisable(true);
+
+				showMessage("Payment complete! (Simulation)");
+
+				currentOrder = null;
+				cartItems.clear();
+
+			} catch (NumberFormatException ex) {
+
+				changeLabel.setText("Please enter a valid dollar amount.");
+
+			} catch (IllegalArgumentException ex) {
+
+				changeLabel.setText(ex.getMessage());
+			}
+		});
+
+		backButton.setOnAction(e -> showCustomer());
+
+		// Layout
+		VBox layout = new VBox(15, title, receiptArea, paymentLabel, paymentField, payButton, changeLabel, backButton);
+
+		layout.setPadding(new Insets(25));
+		layout.setAlignment(Pos.CENTER);
+
+		scene = new Scene(layout, 500, 550);
+		window.setScene(scene);
+	}
+
+	// ---------------- MANAGER SCREEN ----------------
 
     private void showManager() {
 
@@ -343,59 +362,121 @@ public class main extends Application {
 
         // Inventory management
 
-        TextField itemField = new TextField();
-        itemField.setPromptText("Inventory item name");
 
-        TextField amountField = new TextField();
-        amountField.setPromptText("Quantity");
+     // Inventory management
 
-        Button updateInventoryButton =
-                new Button("Update Inventory");
+     Label inventoryLabel = new Label("Inventory Management");
 
-        ListView<String> inventoryList = new ListView<>();
+     // Category dropdown
+     ComboBox<String> categoryBox = new ComboBox<>();
+     categoryBox.getItems().addAll(
+         "Breakfast",
+         "Entrees",
+         "Sides",
+         "Salads",
+         "Family Meals"
+     );
+     categoryBox.setPromptText("Select menu category");
 
-        Runnable refreshInventory = () -> {
-            inventoryList.getItems().clear();
+     // Food item dropdown
+     ComboBox<String> itemBox = new ComboBox<>();
+     itemBox.setPromptText("Select food item");
 
-            for (Map.Entry<String, Integer> entry :
-                    restaurant.getInventory().entrySet()) {
+     // When category changes, update available food items
+     categoryBox.setOnAction(e -> {
 
-                inventoryList.getItems().add(
-                        entry.getKey() + ": " + entry.getValue()
-                );
-            }
-        };
+         itemBox.getItems().clear();
 
-        refreshInventory.run();
+         String category = categoryBox.getValue();
 
-        updateInventoryButton.setOnAction(e -> {
+         Map<String, Double> selectedMenu = null;
 
-            String item = itemField.getText();
+         switch (category) {
 
-            try {
-                int amount = Integer.parseInt(amountField.getText());
+             case "Breakfast":
+                 selectedMenu = restaurant.getMenu().getBreakfast();
+                 break;
 
-                restaurant.editInventory(item, amount);
+			case "Entrees":
+				selectedMenu = restaurant.getMenu().getEntrees();
+				break;
 
-                refreshInventory.run();
+			case "Sides":
+				selectedMenu = restaurant.getMenu().getSides();
+				break;
 
-                itemField.clear();
-                amountField.clear();
+			case "Salads":
+				selectedMenu = restaurant.getMenu().getSalads();
+				break;
 
-                showMessage("Inventory updated!");
+			case "Family Meals":
+				selectedMenu = restaurant.getMenu().getFamily();
+				break;
+			}
 
-            } catch (NumberFormatException ex) {
-                showMessage("Please enter a valid quantity.");
-            }
-        });
+			if (selectedMenu != null) {
+				itemBox.getItems().addAll(selectedMenu.keySet());
+			}
+		});
 
-        VBox inventoryBox = new VBox(10,
-                new Label("Inventory Management"),
-                itemField,
-                amountField,
-                updateInventoryButton,
-                inventoryList
-        );
+		// Quantity field
+		TextField amountField = new TextField();
+		amountField.setPromptText("Enter inventory quantity");
+
+		// Update button
+		Button updateInventoryButton = new Button("Update Inventory");
+
+		// Inventory display
+		ListView<String> inventoryList = new ListView<>();
+
+		Runnable refreshInventory = () -> {
+
+			inventoryList.getItems().clear();
+
+			for (Map.Entry<String, Integer> entry : restaurant.getInventory().entrySet()) {
+
+				inventoryList.getItems().add(entry.getKey() + ": " + entry.getValue());
+			}
+		};
+
+		refreshInventory.run();
+
+		// Update inventory action
+		updateInventoryButton.setOnAction(e -> {
+
+			String item = itemBox.getValue();
+
+			if (item == null) {
+				showMessage("Please select a food item.");
+				return;
+			}
+
+			try {
+
+				int amount = Integer.parseInt(amountField.getText());
+
+				if (amount < 0) {
+					showMessage("Quantity cannot be negative.");
+					return;
+				}
+
+				restaurant.editInventory(item, amount);
+
+				refreshInventory.run();
+
+				amountField.clear();
+
+				showMessage("Inventory updated!");
+
+			} catch (NumberFormatException ex) {
+
+				showMessage("Please enter a valid quantity.");
+			}
+		});
+
+		VBox inventoryBox = new VBox(10, inventoryLabel, categoryBox, itemBox, amountField, updateInventoryButton,
+				inventoryList);
+        
 
         Button backButton = new Button("Back to Home");
 
