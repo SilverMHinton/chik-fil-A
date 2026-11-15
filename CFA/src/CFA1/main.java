@@ -169,6 +169,8 @@ public class main extends Application {
 				currentOrder.addItem(selectedItem, 1);
 				cartItems.add(String.format("%s - $%.2f", selectedItem, currentOrder.getPrice(selectedItem)));
 			}
+			
+			quantitySpinner.getValueFactory().setValue(1);
 		});
 
 		Button checkoutButton = new Button("Checkout");
