@@ -405,12 +405,27 @@ public class main extends Application {
         if (restaurant.getSchedule() != null) {
             scheduleField.setText(restaurant.getSchedule());
         }
+        
+        Label currentScheduleLabel = new Label();
+
+        if (restaurant.getSchedule() != null) {
+            currentScheduleLabel.setText(
+                "Current Schedule: " + restaurant.getSchedule()
+            );
+        } else {
+            currentScheduleLabel.setText("Current Schedule: Not set");
+        }
 
         Button updateScheduleButton =
                 new Button("Update Schedule");
 
         updateScheduleButton.setOnAction(e -> {
-            restaurant.editSchedule(scheduleField.getText());
+        	restaurant.editSchedule(scheduleField.getText());
+
+            currentScheduleLabel.setText(
+                "Current Schedule: " + restaurant.getSchedule()
+            );
+
             showMessage("Schedule updated!");
         });
 
@@ -433,7 +448,7 @@ public class main extends Application {
 
      //Food item dropdown
      ComboBox<String> itemBox = new ComboBox<>();
-     itemBox.setPromptText("Select food item");
+     itemBox.setPromptText("Select Menu Item");
 
      //When category changes, update available food items
      categoryBox.setOnAction(e -> {
@@ -546,8 +561,9 @@ public class main extends Application {
                 employeeLabel,
                 employeeControls,
                 new Label("Restaurant Schedule"),
+                currentScheduleLabel,
                 scheduleField,
-                updateScheduleButton,
+                updateScheduleButton,             
                 inventoryBox,
                 backButton
         );
@@ -576,87 +592,3 @@ public class main extends Application {
     }
 }
 
-
-/*
-		
-		//this is just a test to see that things are properly connected
-		//we can change this later to be more adaptable to user
-		
-		// Create restaurant
-        Restaurant restaurant = new Restaurant();
-
-        // Add employees
-        restaurant.addEmployee();
-        restaurant.addEmployee();
-        restaurant.addEmployee();
-
-        // Set restaurant information
-        restaurant.editSchedule("Monday - Saturday: 6:30 AM - 10:00 PM");
-
-        // Add inventory
-        restaurant.editInventory("Chick-fil-A Chicken Sandwich", 20);
-        restaurant.editInventory("Waffle Fries (Medium)", 30);
-        restaurant.editInventory("Chick-fil-A Nuggets", 25);
-
-        // Display restaurant
-        restaurant.displayRestaurant();
-
-        System.out.println();
-
-        // Create customer
-        customer customer1 = new customer(
-            101,
-            "John",
-            "Smith",
-            "555-1234"
-        );
-
-        // Create order using restaurant's menu
-        Order order1 = new Order(
-            101,
-            1,
-            restaurant.getMenu()
-        );
-
-        // Add items
-        order1.addItem("Chick-fil-A Chicken Sandwich", 2);
-        order1.addItem("Waffle Fries (Medium)", 1);
-
-        // Give order to customer
-        customer1.placeOrder(order1);
-
-        System.out.println();
-
-        // Display customer
-        customer1.displayCustomer();
-
-        System.out.println();
-
-        // Display customer's orders
-        customer1.displayOrders();
-
-        System.out.println();
-
-        // Create transaction
-        Transactions transaction = new Transactions(order1);
-
-        // Display receipt and calculate total
-        transaction.printReceipt();
-        
-		/*System.out.println("What month is it?");
-
-		// print the menu
-
-		System.out.println("What would you like to order?");
-
-		System.out.println("Are you a rewards member?");
-
-		System.out.println("Cash or Card?");
-
-		System.out.println("Enter payment:");
-
-
-	} 
-
-}
-*/

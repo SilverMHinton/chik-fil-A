@@ -9,31 +9,33 @@ public class Transactions {
         this.order = order;
     }
 
-    // Calculate subtotal
+    //Calculate subtotal
     public double getSubtotal() {
         return order.getSubtotal();
     }
 
-    // Calculate tax
+    //Calculate tax
     public double getTax() {
         return getSubtotal() * 0.07875;
     }
 
-    // Calculate total
+    //Calculate total
     public double getTotal() {
         return getSubtotal() + getTax();
     }
     
+    //Calculate change
     public double calculateChange(double amountPaid) {
         if (amountPaid < getTotal()) {
             throw new IllegalArgumentException(
-                "Not enough money to pay for this order."
+                "Insufficient value."
             );
         }
 
         return amountPaid - getTotal();
     }
     
+    //Receipt
     public void printReceipt() {
     	
         System.out.println("------ RECEIPT ------");
