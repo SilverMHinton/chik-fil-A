@@ -21,20 +21,20 @@ public class main extends Application {
     private Scene scene;
 
     private Order currentOrder;
-    private int nextOrderNumber = 1;
+    private int nextOrderNumber = 1; //first order
 
     private ListView<String> menuList = new ListView<>();
     private ListView<String> cartList = new ListView<>();
 
     private ObservableList<String> cartItems =
-            FXCollections.observableArrayList();
+            FXCollections.observableArrayList(); //cart items
 
     private TextArea receiptArea = new TextArea();
 
     @Override
     public void start(Stage primaryStage) {
 
-        window = primaryStage;
+        window = primaryStage; // main window
 
         window.setTitle("Chick-fil-A Management System");
 
@@ -43,7 +43,7 @@ public class main extends Application {
         window.show();
     }
 
-    // ---------------- HOME SCREEN ----------------
+    //Home screen
 
     private void showHome() {
 
@@ -71,20 +71,20 @@ public class main extends Application {
 		window.setScene(scene);
 	}
 
-	// ---------------- CUSTOMER SCREEN ----------------
+	//Customer screen
 
 	private void showCustomer() {
 
 		if (currentOrder == null) {
 			currentOrder = new Order(1001, nextOrderNumber++, restaurant.getMenu());
-		}
+		} //Starting a new order if necessary
 
 		cartItems.setAll(currentOrder.getOrder());
 
 		Label title = new Label("Customer Ordering");
 		title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-		// Menu category buttons
+		//Menu category buttons
 
 		Button breakfastButton = new Button("Breakfast");
 		Button entreesButton = new Button("Entrees");
@@ -97,6 +97,8 @@ public class main extends Application {
 				beveragesButton);
 
 		categoryButtons.setAlignment(Pos.CENTER);
+		
+		//When category button pressed, display those menuItems
 
 		breakfastButton.setOnAction(e -> displayMenu(restaurant.getMenu().getBreakfast()));
 
@@ -110,7 +112,7 @@ public class main extends Application {
 
 		beveragesButton.setOnAction(e -> displayMenu(restaurant.getMenu().getBeverages()));
 
-		// Menu and cart
+		//Menu on left and cart on right
 
 		Label menuLabel = new Label("Menu Items");
 		Label cartLabel = new Label("Your Order");
@@ -126,7 +128,7 @@ public class main extends Application {
         HBox.setHgrow(menuBox, Priority.ALWAYS);
         HBox.setHgrow(cartBox, Priority.ALWAYS);
 
-        // Quantity selection
+        //Select quantity 1-20
 
         Spinner<Integer> quantitySpinner =
                 new Spinner<>(1, 20, 1);
@@ -146,16 +148,17 @@ public class main extends Application {
 
         		selectedItem = selectedItem.substring(
         		    0, selectedItem.lastIndexOf(" - $")
-			);
+			); //selecting items
 
-			int quantity = quantitySpinner.getValue();
+			int quantity = quantitySpinner.getValue(); //get quantity
 
 			for (int i = 0; i < quantity; i++) {
 				currentOrder.addItem(selectedItem, 1);
 				cartItems.add(String.format("%s - $%.2f", selectedItem, currentOrder.getPrice(selectedItem)));
+				//add to cart
 			}
 			
-			quantitySpinner.getValueFactory().setValue(1);
+			quantitySpinner.getValueFactory().setValue(1); //reset value to 1
 		});
         
         removeButton.setOnAction(e -> {
@@ -174,7 +177,7 @@ public class main extends Application {
 
             showMessage("Item removed!");
 
-        });
+        }); //removing items from cart
 
 		Button checkoutButton = new Button("Checkout");
 		Button backButton = new Button("Back");
@@ -189,7 +192,7 @@ public class main extends Application {
 			    addButton,
 			    removeButton,
 			    checkoutButton
-			);
+			); //box for buttons
 
         orderControls.setAlignment(Pos.CENTER);
 
@@ -199,7 +202,7 @@ public class main extends Application {
                 lists,
                 orderControls,
                 backButton
-        );
+        ); //layout of page
 
         layout.setPadding(new Insets(20));
 		layout.setAlignment(Pos.CENTER);
@@ -258,7 +261,7 @@ public class main extends Application {
 
 		receiptArea.setText(receipt.toString());
 
-		// Payment controls
+		//Payment controls
 		Label paymentLabel = new Label("Enter amount to pay:");
 
 		TextField paymentField = new TextField();
@@ -269,7 +272,7 @@ public class main extends Application {
 		Button payButton = new Button("Complete Payment");
 		Button backButton = new Button("Back to Menu");
 
-		// Payment button
+		//Payment button
 		payButton.setOnAction(e -> {
 
 			try {
@@ -357,16 +360,15 @@ public class main extends Application {
 		window.setScene(scene);
 	}
 
-	// ---------------- MANAGER SCREEN ----------------
+	//Manager screen
 
     private void showManager() {
-    	
     	
 
         Label title = new Label("Manager Dashboard");
         title.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
 
-        // Employee management
+        //Employee management
 
         Label employeeLabel = new Label(
                 "Employees: " + restaurant.getEmployeeCount()
@@ -394,7 +396,7 @@ public class main extends Application {
                 removeEmployeeButton
         );
 
-        // Schedule management
+        //Schedule management
 
         TextField scheduleField = new TextField();
 
@@ -412,14 +414,12 @@ public class main extends Application {
             showMessage("Schedule updated!");
         });
 
-        // Inventory management
 
-
-     // Inventory management
+     //Inventory management
 
      Label inventoryLabel = new Label("Inventory Management");
 
-     // Category dropdown
+     //Category dropdown
      ComboBox<String> categoryBox = new ComboBox<>();
      categoryBox.getItems().addAll(
          "Breakfast",
@@ -431,11 +431,11 @@ public class main extends Application {
      );
      categoryBox.setPromptText("Select menu category");
 
-     // Food item dropdown
+     //Food item dropdown
      ComboBox<String> itemBox = new ComboBox<>();
      itemBox.setPromptText("Select food item");
 
-     // When category changes, update available food items
+     //When category changes, update available food items
      categoryBox.setOnAction(e -> {
 
          itemBox.getItems().clear();
@@ -477,14 +477,14 @@ public class main extends Application {
 			}
 		});
 
-		// Quantity field
+		//Quantity field
 		TextField amountField = new TextField();
 		amountField.setPromptText("Enter inventory quantity");
 
-		// Update button
+		//Update button
 		Button updateInventoryButton = new Button("Update Inventory");
 
-		// Inventory display
+		//Inventory display
 		ListView<String> inventoryList = new ListView<>();
 
 		Runnable refreshInventory = () -> {
@@ -499,7 +499,7 @@ public class main extends Application {
 
 		refreshInventory.run();
 
-		// Update inventory action
+		//Update inventory action
 		updateInventoryButton.setOnAction(e -> {
 
 			String item = itemBox.getValue();
@@ -558,7 +558,7 @@ public class main extends Application {
         window.setScene(scene);
     }
 
-    // ---------------- MESSAGE BOX ----------------
+    //All-purpose message box method
 
     private void showMessage(String message) {
 
