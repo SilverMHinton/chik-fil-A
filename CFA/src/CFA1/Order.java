@@ -79,6 +79,10 @@ public class Order {
 	    if (menu.getFamily().containsKey(menuItem)) {
 	        return menu.getFamily().get(menuItem);
 	    }
+	    
+	    if (menu.getBeverages().containsKey(menuItem)) {
+	        return menu.getBeverages().get(menuItem);
+	    }
 
 	    return 0;
 	}

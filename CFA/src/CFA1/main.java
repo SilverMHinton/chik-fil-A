@@ -52,86 +52,70 @@ public class main extends Application {
 
         Label subtitle = new Label("Restaurant Management System");
 
-        Button customerButton = new Button("Customer");
-        Button managerButton = new Button("Manager");
+		Button customerButton = new Button("Customer");
+		Button managerButton = new Button("Manager");
 
-        customerButton.setPrefSize(180, 60);
-        managerButton.setPrefSize(180, 60);
+		customerButton.setPrefSize(180, 60);
+		managerButton.setPrefSize(180, 60);
 
-        customerButton.setOnAction(e -> showCustomer());
+		customerButton.setOnAction(e -> showCustomer());
 
-        managerButton.setOnAction(e -> showManager());
+		managerButton.setOnAction(e -> showManagerLogin());
 
-        VBox layout = new VBox(20,
-                title,
-                subtitle,
-                customerButton,
-                managerButton
-        );
+		VBox layout = new VBox(20, title, subtitle, customerButton, managerButton);
 
-        layout.setAlignment(Pos.CENTER);
-        layout.setPadding(new Insets(30));
+		layout.setAlignment(Pos.CENTER);
+		layout.setPadding(new Insets(30));
 
-        scene = new Scene(layout, 750, 550);
-        window.setScene(scene);
-    }
+		scene = new Scene(layout, 750, 550);
+		window.setScene(scene);
+	}
 
-    // ---------------- CUSTOMER SCREEN ----------------
+	// ---------------- CUSTOMER SCREEN ----------------
 
-    private void showCustomer() {
+	private void showCustomer() {
 
-    	if (currentOrder == null) {
-    	    currentOrder = new Order(
-    	            1001,
-    	            nextOrderNumber++,
-    	            restaurant.getMenu()
-    	    );
-    	}
+		if (currentOrder == null) {
+			currentOrder = new Order(1001, nextOrderNumber++, restaurant.getMenu());
+		}
 
-    	cartItems.setAll(currentOrder.getOrder());
+		cartItems.setAll(currentOrder.getOrder());
 
-        Label title = new Label("Customer Ordering");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+		Label title = new Label("Customer Ordering");
+		title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        // Menu category buttons
+		// Menu category buttons
 
-        Button breakfastButton = new Button("Breakfast");
-        Button entreesButton = new Button("Entrees");
-        Button sidesButton = new Button("Sides");
-        Button saladsButton = new Button("Salads");
-        Button familyButton = new Button("Family Meals");
+		Button breakfastButton = new Button("Breakfast");
+		Button entreesButton = new Button("Entrees");
+		Button sidesButton = new Button("Sides");
+		Button saladsButton = new Button("Salads");
+		Button familyButton = new Button("Family Meals");
+		Button beveragesButton = new Button("Beverages");
 
-        HBox categoryButtons = new HBox(10,
-                breakfastButton,
-                entreesButton,
-                sidesButton,
-                saladsButton,
-                familyButton
-        );
+		HBox categoryButtons = new HBox(10, breakfastButton, entreesButton, sidesButton, saladsButton, familyButton,
+				beveragesButton);
 
-        categoryButtons.setAlignment(Pos.CENTER);
+		categoryButtons.setAlignment(Pos.CENTER);
 
-        breakfastButton.setOnAction(e ->
-                displayMenu(restaurant.getMenu().getBreakfast()));
+		breakfastButton.setOnAction(e -> displayMenu(restaurant.getMenu().getBreakfast()));
 
-        entreesButton.setOnAction(e ->
-                displayMenu(restaurant.getMenu().getEntrees()));
+		entreesButton.setOnAction(e -> displayMenu(restaurant.getMenu().getEntrees()));
 
-        sidesButton.setOnAction(e ->
-                displayMenu(restaurant.getMenu().getSides()));
+		sidesButton.setOnAction(e -> displayMenu(restaurant.getMenu().getSides()));
 
-        saladsButton.setOnAction(e ->
-                displayMenu(restaurant.getMenu().getSalads()));
+		saladsButton.setOnAction(e -> displayMenu(restaurant.getMenu().getSalads()));
 
-        familyButton.setOnAction(e ->
-                displayMenu(restaurant.getMenu().getFamily()));
+		familyButton.setOnAction(e -> displayMenu(restaurant.getMenu().getFamily()));
 
-        // Menu and cart
+		beveragesButton.setOnAction(e -> displayMenu(restaurant.getMenu().getBeverages()));
 
-        Label menuLabel = new Label("Menu Items");
-        Label cartLabel = new Label("Your Order");
+		// Menu and cart
 
-        menuList.setPrefHeight(250);
+		Label menuLabel = new Label("Menu Items");
+		Label cartLabel = new Label("Your Order");
+
+		menuList.setPrefHeight(250);
         cartList.setItems(cartItems);
         cartList.setPrefHeight(250);
 
@@ -147,7 +131,8 @@ public class main extends Application {
         Spinner<Integer> quantitySpinner =
                 new Spinner<>(1, 20, 1);
 
-        Button addButton = new Button("Add to Order");
+        Button addButton = new Button("Add Item");
+        Button removeButton = new Button("Remove Item");
 
         addButton.setOnAction(e -> {
 
@@ -172,6 +157,24 @@ public class main extends Application {
 			
 			quantitySpinner.getValueFactory().setValue(1);
 		});
+        
+        removeButton.setOnAction(e -> {
+
+            String selectedItem =
+                cartList.getSelectionModel().getSelectedItem();
+
+            if (selectedItem == null) {
+                showMessage("Please select an item to remove.");
+                return;
+            }
+
+            currentOrder.removeItem(selectedItem, 1);
+
+            cartItems.remove(selectedItem);
+
+            showMessage("Item removed!");
+
+        });
 
 		Button checkoutButton = new Button("Checkout");
 		Button backButton = new Button("Back");
@@ -180,8 +183,13 @@ public class main extends Application {
 
 		backButton.setOnAction(e -> showHome());
 
-		HBox orderControls = new HBox(10, new Label("Quantity:"), quantitySpinner, addButton, checkoutButton
-        );
+		HBox orderControls = new HBox(10,
+			    new Label("Quantity:"),
+			    quantitySpinner,
+			    addButton,
+			    removeButton,
+			    checkoutButton
+			);
 
         orderControls.setAlignment(Pos.CENTER);
 
@@ -200,7 +208,7 @@ public class main extends Application {
 		window.setScene(scene);
 	}
 
-	// Displays the selected menu category
+	//show menu items in selected category
 
 	private void displayMenu(Map<String, Double> items) {
 
@@ -215,7 +223,7 @@ public class main extends Application {
 		}
 	}
 
-	// ---------------- CHECKOUT SCREEN ----------------
+	//checkout screen
 
 	private void showCheckout() {
 
@@ -282,7 +290,7 @@ public class main extends Application {
 				payButton.setDisable(true);
 				paymentField.setDisable(true);
 
-				showMessage("Payment complete! (Simulation)");
+				showMessage(String.format("Payment complete! Your change: $%.2f", change));
 
 				currentOrder = null;
 				cartItems.clear();
@@ -299,7 +307,7 @@ public class main extends Application {
 
 		backButton.setOnAction(e -> showCustomer());
 
-		// Layout
+		//Layout
 		VBox layout = new VBox(15, title, receiptArea, paymentLabel, paymentField, payButton, changeLabel, backButton);
 
 		layout.setPadding(new Insets(25));
@@ -308,10 +316,52 @@ public class main extends Application {
 		scene = new Scene(layout, 500, 550);
 		window.setScene(scene);
 	}
+	
+	//manager login page
+	
+	private void showManagerLogin() {
+		Label title = new Label("Manager Login");
+		title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+		TextField usernameField = new TextField();
+		usernameField.setPromptText("Enter username");
+
+		PasswordField passwordField = new PasswordField();
+		passwordField.setPromptText("Enter password");
+
+		Label messageLabel = new Label();
+
+		Button loginButton = new Button("Login");
+		Button backButton = new Button("Back");
+
+		loginButton.setOnAction(e -> {
+			String username = usernameField.getText();
+			String password = passwordField.getText();
+
+			if (username.equals("admin") && password.equals("Secret555")) {
+				showManager();
+			} else {
+				messageLabel.setText("Incorrect username or password.");
+			}
+		});
+
+		backButton.setOnAction(e -> showHome());
+
+		VBox layout = new VBox(12, title, new Label("Username:"), usernameField, new Label("Password:"), passwordField,
+				loginButton, messageLabel, backButton);
+
+		layout.setPadding(new Insets(30));
+		layout.setAlignment(Pos.CENTER);
+
+		scene = new Scene(layout, 500, 450);
+		window.setScene(scene);
+	}
 
 	// ---------------- MANAGER SCREEN ----------------
 
     private void showManager() {
+    	
+    	
 
         Label title = new Label("Manager Dashboard");
         title.setStyle("-fx-font-size: 25px; -fx-font-weight: bold;");
@@ -376,7 +426,8 @@ public class main extends Application {
          "Entrees",
          "Sides",
          "Salads",
-         "Family Meals"
+         "Family Meals",
+         "Beverages"
      );
      categoryBox.setPromptText("Select menu category");
 
@@ -414,7 +465,12 @@ public class main extends Application {
 			case "Family Meals":
 				selectedMenu = restaurant.getMenu().getFamily();
 				break;
+				
+			case "Beverages":
+				selectedMenu = restaurant.getMenu().getBeverages();
+				break;
 			}
+			
 
 			if (selectedMenu != null) {
 				itemBox.getItems().addAll(selectedMenu.keySet());

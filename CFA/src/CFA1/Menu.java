@@ -12,6 +12,7 @@ public class Menu {
     Map<String, Double> sides = new HashMap<>();
     Map<String, Double> salads = new HashMap<>();
     Map<String, Double> family = new HashMap<>();
+    Map<String, Double> beverages = new HashMap<>();
 
     public Menu() {
         loadMenu(entrees, MenuType.ENTREES);
@@ -19,6 +20,7 @@ public class Menu {
         loadMenu(sides, MenuType.SIDES);
         loadMenu(salads, MenuType.SALADS);
         loadMenu(family, MenuType.FAMILY);
+        loadMenu(beverages, MenuType.BEVERAGES);
     }
 
 	private void loadMenu(Map<String, Double> menu, MenuType type) {
@@ -74,6 +76,29 @@ public class Menu {
 			menu.put("Chick-fil-A Nuggets Family Style Meal", 32.99);
 			menu.put("Grilled Nuggets Family Style Meal", 36.99);
 			break;
+			
+		case BEVERAGES:
+		    menu.put("Chick-fil-A Lemonade", 3.49);
+		    menu.put("Diet Lemonade", 3.49);
+		    menu.put("Sweet Iced Tea", 2.99);
+		    menu.put("Unsweetened Iced Tea", 2.99);
+		    menu.put("Sunjoy", 3.49);
+		    menu.put("Coca-Cola", 2.99);
+		    menu.put("Coca-Cola Zero Sugar", 2.99);
+		    menu.put("Sprite", 2.99);
+		    menu.put("Dr Pepper", 2.99);
+		    menu.put("Barq's Root Beer", 2.99);
+		    menu.put("Hi-C Fruit Punch", 2.99);
+		    menu.put("Powerade", 2.99);
+		    menu.put("Dasani Bottled Water", 2.49);
+		    menu.put("Honest Kids Apple Juice", 2.19);
+		    menu.put("Simply Orange Juice", 3.49);
+		    menu.put("1% Milk", 2.19);
+		    menu.put("1% Chocolate Milk", 2.19);
+		    menu.put("Hot Coffee", 2.49);
+		    menu.put("Iced Coffee", 4.49);
+		    menu.put("Cream Cold Brew", 5.49);
+		    break;
 
 		default:
 			break;
@@ -100,6 +125,10 @@ public class Menu {
 
 	public Map<String, Double> getFamily() {
 		return family;
+	}
+	
+	public Map<String, Double> getBeverages() {
+		return beverages;
 	}
 }
 

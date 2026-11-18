@@ -6,7 +6,8 @@ public enum MenuType {
 	    BREAKFAST,
 	    SIDES,
 	    SALADS,
-	    FAMILY
+	    FAMILY,
+	    BEVERAGES,
 	
 
 }
