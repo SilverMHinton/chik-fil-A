@@ -211,7 +211,7 @@ public class main extends Application {
 		window.setScene(scene);
 	}
 
-	//show menu items in selected category
+	//Method to display menu items in selected category
 
 	private void displayMenu(Map<String, Double> items) {
 
@@ -226,7 +226,7 @@ public class main extends Application {
 		}
 	}
 
-	//checkout screen
+	//Checkout screen
 
 	private void showCheckout() {
 

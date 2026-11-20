@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Menu {
 	
-	//maps
+	//Maps
 
     Map<String, Double> entrees = new HashMap<>();
     Map<String, Double> breakfast = new HashMap<>();
@@ -16,7 +16,7 @@ public class Menu {
     Map<String, Double> family = new HashMap<>();
     Map<String, Double> beverages = new HashMap<>();
     
-    //constructor
+    //Constructor
     
     public Menu() {
         loadMenu(entrees, MenuType.ENTREES);
@@ -112,7 +112,7 @@ public class Menu {
 
 	}
 	
-	//getters of menuItem maps
+	//Getters of menuItem maps
 
 	public Map<String, Double> getEntrees() {
 		return entrees;
